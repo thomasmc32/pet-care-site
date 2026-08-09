@@ -24,6 +24,10 @@
         .hero { padding: 32px 24px; margin-bottom: 24px; text-align: center; }
         .hero h1 { color: #2458c6; font-size: clamp(1.8rem, 4vw, 2.45rem); letter-spacing: -.04em; }
         .hero p { margin-top: 7px; color: var(--muted); }
+        .food-location { display: flex; align-items: center; gap: 16px; margin: 0 auto 24px; padding: 14px; max-width: 620px; background: rgba(255, 255, 255, .85); border: 1px solid #e4ebfa; border-radius: 18px; box-shadow: 0 8px 20px rgba(40, 60, 110, .07); }
+        .food-location img { width: 104px; height: 76px; object-fit: cover; border-radius: 11px; }
+        .food-location h2 { color: #2d477c; font-size: 1rem; }
+        .food-location p { margin-top: 3px; color: var(--muted); font-size: .9rem; }
         .filter-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 24px; }
         .filter-tab { padding: 8px 14px; border: 1px solid #dce6fb; border-radius: 999px; background: rgba(255, 255, 255, .7); color: #52627d; cursor: pointer; font: inherit; font-size: .86rem; font-weight: 700; transition: background .2s ease, color .2s ease, transform .2s ease; }
         .filter-tab:hover { transform: translateY(-1px); background: #fff; }
@@ -82,6 +86,8 @@
             letter-spacing: .04em;
             text-transform: uppercase;
         }
+        .bowl-label { display: inline-flex; align-items: center; gap: 5px; margin: -5px 0 14px 8px; color: #52627d; font-size: .75rem; font-weight: 700; vertical-align: middle; }
+        .bowl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--bowl-color); box-shadow: 0 0 0 2px #fff, 0 0 0 3px #d9e2f5; }
         .care-list { display: grid; gap: 8px; text-align: left; }
         .care-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f7f9fe; border-radius: 12px; }
         .care-icon { display: grid; place-items: center; flex: 0 0 32px; width: 32px; height: 32px; border-radius: 10px; background: #e8f0ff; font-size: 1rem; }
@@ -132,10 +138,18 @@
 </head>
 <body>
 <main class="container">
-    <header class="hero">
-        <h1>&#128062; McConnell Pets &#128062;</h1>
-        <p>made by thomas mcconnell</p>
-    </header>
+        <header class="hero">
+            <h1>&#128062; McConnell Pets &#128062;</h1>
+            <p>made by thomas mcconnell</p>
+        </header>
+
+        <section class="food-location" aria-labelledby="food-location-heading">
+            <img src="images/food.png" alt="Pet food on the bottom shelf of the brown cabinet">
+            <div>
+                <h2 id="food-location-heading">Where the food is</h2>
+                <p>On the bottom shelf of the brown cabinet.</p>
+            </div>
+        </section>
 
     <nav class="filter-tabs" aria-label="Filter pet profiles">
         <button class="filter-tab is-active" type="button" data-filter="all" aria-pressed="true">All</button>
@@ -165,11 +179,24 @@
     </section>
 </main>
 <script>
-    document.querySelectorAll('.card').forEach(card => {
-        const name = card.querySelector('h2').textContent.trim();
-        const isTeddy = name === 'Teddy';
-        card.dataset.type = card.querySelector('.badge').textContent.trim().toLowerCase();
-        if (isTeddy) card.classList.add('has-medical');
+        document.querySelectorAll('.card').forEach(card => {
+            const name = card.querySelector('h2').textContent.trim();
+            const isTeddy = name === 'Teddy';
+            card.dataset.type = card.querySelector('.badge').textContent.trim().toLowerCase();
+            const bowlColors = {
+                Lucy: { label: 'Pink bowl', color: '#ef94bb' },
+                Moose: { label: 'Sage green bowl', color: '#89a98d' },
+                Snoop: { label: 'Navy blue bowl', color: '#233f7d' }
+            };
+            if (bowlColors[name]) {
+                const bowl = bowlColors[name];
+                const label = document.createElement('span');
+                label.className = 'bowl-label';
+                label.style.setProperty('--bowl-color', bowl.color);
+                label.innerHTML = `<span class="bowl-dot"></span>${bowl.label}`;
+                card.querySelector('.badge').after(label);
+            }
+            if (isTeddy) card.classList.add('has-medical');
         const button = document.createElement('button');
         button.className = 'details-toggle';
         button.type = 'button';
