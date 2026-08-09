@@ -3,226 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>McConnell Pets</title>
+    <title>Pet Home Profiles</title>
     <style>
-        :root { --blue: #356be8; --ink: #24334e; --muted: #66758d; --surface: #ffffff; --soft: #f4f7ff; }
-        * { box-sizing: border-box; margin: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #f3f7ff, #f9fbff 55%, #effaf7);
-            color: var(--ink);
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            line-height: 1.5;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #2a2a2a;
+            line-height: 1.6;
         }
-        .container { max-width: 1040px; margin: 0 auto; padding: 32px 24px 48px; }
-        .hero, .tribute {
-            background: rgba(255, 255, 255, .88);
-            border: 1px solid rgba(255, 255, 255, .95);
-            border-radius: 24px;
-            box-shadow: 0 14px 34px rgba(48, 76, 128, .10);
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px;
         }
-        .hero { padding: 32px 24px; margin-bottom: 24px; text-align: center; }
-        .hero h1 { color: #2458c6; font-size: clamp(1.8rem, 4vw, 2.45rem); letter-spacing: -.04em; }
-        .hero p { margin-top: 7px; color: var(--muted); }
-        .filter-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 24px; }
-        .filter-count { align-self: center; margin-right: 3px; color: #52627d; font-size: .86rem; font-weight: 700; white-space: nowrap; }
-        .filter-count strong { color: #2458c6; }
-        .filter-tab { padding: 8px 14px; border: 1px solid #dce6fb; border-radius: 999px; background: rgba(255, 255, 255, .7); color: #52627d; cursor: pointer; font: inherit; font-size: .86rem; font-weight: 700; transition: background .2s ease, color .2s ease, transform .2s ease; }
-        .filter-tab:hover { transform: translateY(-1px); background: #fff; }
-        .filter-tab.is-active { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 5px 12px rgba(53, 107, 232, .22); }
-        .profiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
-        .card {
-            position: relative;
-            padding: 22px 18px 18px;
-            background: var(--surface);
-            border: 1px solid #e4ebfa;
-            border-radius: 20px;
-            box-shadow: 0 10px 24px rgba(40, 60, 110, .08);
+        .hero {
+            background: #fff;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.08);
+            margin-bottom: 20px;
             text-align: center;
-            transition: transform .2s ease, box-shadow .2s ease;
         }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 16px 30px rgba(40, 60, 110, .13); }
-        .card.is-filtered-out { display: none; }
-        .card.has-medical::before {
-            content: '✚';
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            z-index: 1;
+        .hero h1 { color: #2f6fed; margin-bottom: 10px; }
+        .profiles {
             display: grid;
-            place-items: center;
-            width: 27px;
-            height: 27px;
-            border-radius: 50%;
-            background: #fff2da;
-            color: #9a5d12;
-            font-size: 1rem;
-            font-weight: 800;
-            letter-spacing: .04em;
-            text-transform: uppercase;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
         }
-        .profile-photo {
-            display: block;
-            width: 116px;
-            height: 116px;
-            margin: 0 auto 12px;
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+        .card img {
+            width: 100%;
+            height: 220px;
             object-fit: cover;
-            border: 4px solid #edf3ff;
-            border-radius: 50%;
-            box-shadow: 0 5px 12px rgba(53, 107, 232, .18);
+            background: #e6edff;
         }
-        .card h2 { color: #213e7b; font-size: 1.35rem; letter-spacing: -.025em; }
+        .card-content { padding: 16px; }
+        .card h2 { color: #2f6fed; margin-bottom: 8px; }
         .badge {
             display: inline-block;
-            margin: 5px 0 14px;
-            padding: 3px 10px;
-            border-radius: 999px;
-            background: #eaf1ff;
-            color: #3164d8;
-            font-size: .76rem;
-            font-weight: 750;
-            letter-spacing: .04em;
-            text-transform: uppercase;
+            background: #eef4ff;
+            color: #2f6fed;
+            border-radius: 10px;
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
         }
-        .care-list { display: grid; gap: 8px; text-align: left; }
-        .care-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f7f9fe; border-radius: 12px; }
-        .care-icon { display: grid; place-items: center; flex: 0 0 32px; width: 32px; height: 32px; border-radius: 10px; background: #e8f0ff; font-size: 1rem; }
-        .care-copy { color: #53627a; font-size: .89rem; line-height: 1.35; }
-        .care-copy strong { display: block; color: #293953; font-size: .8rem; }
-        .details-toggle {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            width: 100%;
-            margin-top: 14px;
-            padding: 10px 12px;
-            border: 1px solid #dce6fb;
-            border-radius: 11px;
-            background: #fff;
-            color: #315fc6;
-            cursor: pointer;
-            font: inherit;
-            font-size: .84rem;
-            font-weight: 700;
-            transition: background .2s ease, border-color .2s ease;
-        }
-        .details-toggle:hover { background: #f4f7ff; border-color: #b9ccfa; }
-        .details-toggle::after { content: '+'; font-size: 1.1rem; line-height: .8; transition: transform .25s ease; }
-        .card.is-open .details-toggle::after { transform: rotate(45deg); }
-        .details-wrap { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .35s ease, opacity .25s ease; }
-        .card.is-open .details-wrap { grid-template-rows: 1fr; opacity: 1; }
-        .details { min-height: 0; overflow: hidden; text-align: left; }
-        .details-content { padding-top: 16px; }
-        .details-title { color: #2d477c; font-size: .86rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
-        .info-grid { display: grid; gap: 8px; margin-top: 9px; }
-        .info-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 10px; background: #f7f9fe; border-radius: 10px; color: #5e6d84; font-size: .84rem; }
-        .info-row span:first-child { color: #2b3a54; font-weight: 700; }
-        .medicine { margin-top: 14px; padding: 12px; border: 1px solid #f2d5a2; border-radius: 12px; background: #fffaf0; }
-        .medicine h4 { color: #965b13; font-size: .9rem; }
-        .medicine p { margin-top: 4px; color: #654f30; font-size: .87rem; }
-        .medicine-photo { display: block; width: 100%; max-height: 180px; margin-top: 10px; object-fit: cover; border-radius: 9px; }
-        .tribute { margin-top: 28px; padding: 26px; text-align: center; }
-        .tribute-heading { color: #4c4687; font-size: 1.5rem; letter-spacing: -.025em; }
-        .tribute-copy { margin: 5px auto 20px; color: var(--muted); }
-        .memory-gallery { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        .memory { aspect-ratio: 1; overflow: hidden; border-radius: 14px; background: #eef2fa; box-shadow: 0 5px 12px rgba(47, 63, 104, .10); }
-        .memory img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .25s ease; }
-        .memory:hover img { transform: scale(1.06); }
-        @media (max-width: 640px) { .container { padding: 18px 16px 32px; } .hero { padding: 26px 16px; } .tribute { padding: 22px 16px; } .memory-gallery { grid-template-columns: repeat(2, 1fr); } }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 6px; }
     </style>
 </head>
 <body>
-    <main class="container">
-        <header class="hero">
-            <h1>&#128062; McConnell Pets &#128062;</h1>
-            <p>made by thomas mcconnell</p>
-        </header>
+<div class="container">
+    <div class="hero">
+        <h1>🐾 Pet Home Profiles</h1>
+        <p>Quick care reference for feeding, water, and daily needs.</p>
+    </div>
 
-        <nav class="filter-tabs" aria-label="Filter pet profiles">
-            <p class="filter-count" aria-live="polite"><strong id="animal-count">0</strong> <span id="animal-count-label">animals</span></p>
-            <button class="filter-tab is-active" type="button" data-filter="all" aria-pressed="true">All</button>
-            <button class="filter-tab" type="button" data-filter="dog" aria-pressed="false">Dogs</button>
-            <button class="filter-tab" type="button" data-filter="cat" aria-pressed="false">Cats</button>
-            <button class="filter-tab" type="button" data-filter="bunny" aria-pressed="false">Bunny</button>
-        </nav>
-
-        <section class="profiles" aria-label="Pet care profiles">
-            <article class="card"><img class="profile-photo" src="images/lucy.jpg" alt="Lucy"><h2>Lucy</h2><span class="badge">Dog</span><div class="care-list"><div class="care-item"><span class="care-icon">&#127860;</span><p class="care-copy"><strong>Morning · once daily</strong>6 cups of food</p></div><div class="care-item"><span class="care-icon">&#128167;</span><p class="care-copy"><strong>Water</strong>as needed</p></div></div></article>
-            <article class="card"><img class="profile-photo" src="images/moose.jpg" alt="Moose"><h2>Moose</h2><span class="badge">Dog</span><div class="care-list"><div class="care-item"><span class="care-icon">&#127860;</span><p class="care-copy"><strong>Morning</strong>4 cups of food</p></div><div class="care-item"><span class="care-icon">&#127769;</span><p class="care-copy"><strong>Evening · 4–6 PM</strong>4 cups of food</p></div><div class="care-item"><span class="care-icon">&#128167;</span><p class="care-copy"><strong>Water</strong>as needed</p></div></div></article>
-            <article class="card"><img class="profile-photo" src="images/snoop.jpg" alt="Snoop"><h2>Snoop</h2><span class="badge">Dog</span><div class="care-list"><div class="care-item"><span class="care-icon">&#127860;</span><p class="care-copy"><strong>Morning</strong>8 cups of food</p></div><div class="care-item"><span class="care-icon">&#128167;</span><p class="care-copy"><strong>Water</strong>as needed</p></div></div></article>
-            <article class="card"><img class="profile-photo" src="images/grey.jpg" alt="Grey"><h2>Grey</h2><span class="badge">Cat</span><div class="care-list"><div class="care-item"><span class="care-icon">&#127860;</span><p class="care-copy"><strong>Morning</strong>1 cup dry food</p></div><div class="care-item"><span class="care-icon">&#128167;</span><p class="care-copy"><strong>Water</strong>as needed</p></div></div></article>
-            <article class="card"><img class="profile-photo" src="images/teddy.jpg" alt="Teddy"><h2>Teddy</h2><span class="badge">Cat</span><div class="care-list"><div class="care-item"><span class="care-icon">&#127860;</span><p class="care-copy"><strong>Morning</strong>1 cup dry food</p></div><div class="care-item"><span class="care-icon">&#128167;</span><p class="care-copy"><strong>Water</strong>as needed</p></div></div></article>
-            <article class="card"><img class="profile-photo" src="images/stormy.jpg" alt="Stormy"><h2>Stormy</h2><span class="badge">Cat</span><div class="care-list"><div class="care-item"><span class="care-icon">&#127860;</span><p class="care-copy"><strong>Morning</strong>1 cup dry food</p></div><div class="care-item"><span class="care-icon">&#128167;</span><p class="care-copy"><strong>Water</strong>as needed</p></div></div></article>
-            <article class="card"><img class="profile-photo" src="images/bunbun.jpg" alt="Bun Bun"><h2>Bun Bun</h2><span class="badge">Bunny</span><div class="care-list"><div class="care-item"><span class="care-icon">&#129365;</span><p class="care-copy"><strong>Food options</strong>Hay, bunny food, lettuce, or carrots</p></div><div class="care-item"><span class="care-icon">&#128167;</span><p class="care-copy"><strong>Water</strong>keep filled</p></div></div></article>
-
-
-        </section>
-
-        <section class="tribute" id="winnie-tribute" aria-labelledby="winnie-heading">
-            <h2 class="tribute-heading" id="winnie-heading">&#9825; Winnie &#9825;</h2>
-            <p class="tribute-copy"></p>
-            <div class="memory-gallery" aria-label="Winnie photo memories">
-                <figure class="memory"><img src="images/winnie1.jpg" alt="Winnie memory 1"></figure><figure class="memory"><img src="images/winnie2.jpg" alt="Winnie memory 2"></figure><figure class="memory"><img src="images/winnie3.jpg" alt="Winnie memory 3"></figure><figure class="memory"><img src="images/winnie4.jpg" alt="Winnie memory 4"></figure><figure class="memory"><img src="images/winnie5.jpg" alt="Winnie memory 5"></figure><figure class="memory"><img src="images/winnie6.jpg" alt="Winnie memory 6"></figure><figure class="memory"><img src="images/winnie7.jpg" alt="Winnie memory 7"></figure><figure class="memory"><img src="images/winnie8.jpg" alt="Winnie memory 8"></figure><figure class="memory"><img src="images/winnie9.jpg" alt="Winnie memory 9"></figure><figure class="memory"><img src="images/winnie10.jpg" alt="Winnie memory 10"></figure>
+    <div class="profiles">
+        <article class="card">
+            <img src="images/lucy.jpg" alt="Lucy profile photo">
+            <div class="card-content">
+                <h2>Lucy</h2>
+                <span class="badge">Dog</span>
+                <ul>
+                    <li><strong>Morning (once daily):</strong> 6 cups of food</li>
+                    <li><strong>Water:</strong> Keep fresh water available</li>
+                </ul>
             </div>
-        </section>
-    </main>
-    <script>
-        document.querySelectorAll('.card').forEach(card => {
-            const name = card.querySelector('h2').textContent.trim();
-            const isTeddy = name === 'Teddy';
-            card.dataset.type = card.querySelector('.badge').textContent.trim().toLowerCase();
-            if (isTeddy) card.classList.add('has-medical');
-            const button = document.createElement('button');
-            button.className = 'details-toggle';
-            button.type = 'button';
-            button.setAttribute('aria-expanded', 'false');
-            button.textContent = 'General information';
+        </article>
 
-            const wrap = document.createElement('div');
-            wrap.className = 'details-wrap';
-            wrap.innerHTML = `<div class="details"><div class="details-content"><h3 class="details-title">General information</h3><div class="info-grid"><div class="info-row"><span>Birthday</span><span></span></div><div class="info-row"><span>Medical notes</span><span></span></div></div>${isTeddy ? '<section class="medicine"><h4>Medication</h4><p><strong>Methimazole</strong> · 0.25 mL by mouth every 12 hours (morning and night).</p><img class="medicine-photo" src="images/medplace.png" alt="Location of Teddy\'s medicine" onerror="this.hidden=true"></section>' : ''}</div></div>`;
-            card.append(button, wrap);
-            button.addEventListener('click', () => {
-                const open = card.classList.toggle('is-open');
-                button.setAttribute('aria-expanded', String(open));
-                button.textContent = open ? 'Hide information' : 'General information';
-            });
-        });
+        <article class="card">
+            <img src="images/moose.jpg" alt="Moose profile photo">
+            <div class="card-content">
+                <h2>Moose</h2>
+                <span class="badge">Dog</span>
+                <ul>
+                    <li><strong>Morning:</strong> 4 cups of food</li>
+                    <li><strong>Evening (4–6 PM):</strong> 4 cups of food</li>
+                    <li><strong>Water:</strong> Keep fresh water available</li>
+                </ul>
+            </div>
+        </article>
 
-        document.querySelectorAll('.filter-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                const filter = tab.dataset.filter;
-                const cards = document.querySelectorAll('.card');
-                document.querySelectorAll('.filter-tab').forEach(item => {
-                    const active = item === tab;
-                    item.classList.toggle('is-active', active);
-                    item.setAttribute('aria-pressed', String(active));
-                });
-                let visible = 0;
-                cards.forEach(card => {
-                    const show = filter === 'all' || card.dataset.type === filter;
-                    card.classList.toggle('is-filtered-out', !show);
-                    if (show) visible += 1;
-                });
-                document.getElementById('animal-count').textContent = visible;
-                document.getElementById('animal-count-label').textContent = visible === 1 ? 'animal' : 'animals';
-            });
-        });
-        const startingCount = document.querySelectorAll('.card').length;
-        document.getElementById('animal-count').textContent = startingCount;
-        document.getElementById('animal-count-label').textContent = startingCount === 1 ? 'animal' : 'animals';
+        <article class="card">
+            <img src="images/snoop.jpg" alt="Snoop profile photo">
+            <div class="card-content">
+                <h2>Snoop</h2>
+                <span class="badge">Dog</span>
+                <ul>
+                    <li><strong>Morning:</strong> 8 cups of food</li>
+                    <li><strong>Water:</strong> Keep fresh water available</li>
+                </ul>
+            </div>
+        </article>
 
-        const memories = document.querySelectorAll('.memory');
-        const hideMissingMemories = () => {
-            memories.forEach(memory => {
-                const image = memory.querySelector('img');
-                if (image.complete && !image.naturalWidth) memory.hidden = true;
-            });
-            if (![...memories].some(memory => !memory.hidden)) document.getElementById('winnie-tribute').hidden = true;
-        };
-        memories.forEach(memory => memory.querySelector('img').addEventListener('error', hideMissingMemories));
-        window.addEventListener('load', hideMissingMemories);
-    </script>
+        <article class="card">
+            <img src="images/grey.jpg" alt="Grey profile photo">
+            <div class="card-content">
+                <h2>Grey</h2>
+                <span class="badge">Cat</span>
+                <ul>
+                    <li><strong>Morning:</strong> 1 cup dry food</li>
+                    <li><strong>Water:</strong> Keep fresh water available</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="card">
+            <img src="images/teddy.jpg" alt="Teddy profile photo">
+            <div class="card-content">
+                <h2>Teddy</h2>
+                <span class="badge">Cat</span>
+                <ul>
+                    <li><strong>Morning:</strong> 1 cup dry food</li>
+                    <li><strong>Water:</strong> Keep fresh water available</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="card">
+            <img src="images/stormy.jpg" alt="Stormy profile photo">
+            <div class="card-content">
+                <h2>Stormy</h2>
+                <span class="badge">Cat</span>
+                <ul>
+                    <li><strong>Morning:</strong> 1 cup dry food</li>
+                    <li><strong>Water:</strong> Keep fresh water available</li>
+                </ul>
+            </div>
+        </article>
+
+        <article class="card">
+            <img src="images/bun-bun.jpg" alt="Bun Bun profile photo">
+            <div class="card-content">
+                <h2>Bun Bun</h2>
+                <span class="badge">Bunny</span>
+                <ul>
+                    <li><strong>Food options:</strong> Hay, bunny food, lettuce, or carrots</li>
+                    <li><strong>Water:</strong> Keep fresh water available</li>
+                </ul>
+            </div>
+        </article>
+    </div>
+</div>
 </body>
 </html>
